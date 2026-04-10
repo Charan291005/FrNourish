@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FrNourish — Your smart nutrition companion. Track meals, build healthy habits, and achieve your wellness goals with AI-powered insights.">
+    <title>FrNourish — Smart Nutrition & Healthy Eating</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Particle Background -->
+    <div id="particles-bg" class="particles-bg"></div>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loader-content">
+            <div class="loader-logo">
+                <span class="loader-icon"><i class="fas fa-leaf"></i></span>
+                <span class="loader-text">FrNourish</span>
+            </div>
+            <div class="loader-bar">
+                <div class="loader-bar-fill"></div>
+            </div>
+            <p class="loader-tagline">Fueling your healthiest self</p>
+        </div>
+    </div>
+
+    <!-- Onboarding Modal -->
+    <div id="onboarding-modal" class="modal-overlay" style="display:none;">
+        <div class="modal onboarding-modal">
+            <div class="onboarding-steps">
+                <!-- Step 1 -->
+                <div class="onboarding-step active" data-step="1">
+                    <div class="onboarding-icon"><i class="fas fa-hand-sparkles"></i></div>
+                    <h2>Welcome to FrNourish</h2>
+                    <p>Your personal smart nutrition companion. Let's set up your profile to personalize your experience.</p>
+                    <div class="form-group">
+                        <label for="onboard-name">Your Name</label>
+                        <input type="text" id="onboard-name" placeholder="Enter your name" class="form-input">
+                    </div>
+                    <button class="btn btn-primary btn-glow" onclick="nextOnboardStep(2)">Let's Go <i class="fas fa-arrow-right"></i></button>
+                </div>
+                <!-- Step 2 -->
+                <div class="onboarding-step" data-step="2">
+                    <div class="onboarding-icon"><i class="fas fa-ruler-vertical"></i></div>
+                    <h2>Your Body Stats</h2>
+                    <p>We'll use these to calculate your daily targets.</p>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="onboard-age">Age</label>
+                            <input type="number" id="onboard-age" placeholder="25" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="onboard-gender">Gender</label>
+                            <select id="onboard-gender" class="form-input">
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="onboard-height">Height (cm)</label>
+                            <input type="number" id="onboard-height" placeholder="170" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="onboard-weight">Weight (kg)</label>
+                            <input type="number" id="onboard-weight" placeholder="70" class="form-input">
+                        </div>
+                    </div>
+                    <div class="onboarding-nav">
+                        <button class="btn btn-ghost" onclick="nextOnboardStep(1)"><i class="fas fa-arrow-left"></i> Back</button>
+                        <button class="btn btn-primary btn-glow" onclick="nextOnboardStep(3)">Next <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+                <!-- Step 3 -->
+                <div class="onboarding-step" data-step="3">
+                    <div class="onboarding-icon"><i class="fas fa-bullseye"></i></div>
+                    <h2>Your Goal</h2>
+                    <p>What are you looking to achieve?</p>
+                    <div class="goal-options">
+                        <label class="goal-card">
+                            <input type="radio" name="goal" value="lose" checked>
+                            <div class="goal-card-inner">
+                                <i class="fas fa-weight-scale"></i>
+                                <span>Lose Weight</span>
+                            </div>
+                        </label>
+                        <label class="goal-card">
+                            <input type="radio" name="goal" value="maintain">
+                            <div class="goal-card-inner">
+                                <i class="fas fa-balance-scale"></i>
+                                <span>Maintain</span>
+                            </div>
+                        </label>
+                        <label class="goal-card">
+                            <input type="radio" name="goal" value="gain">
+                            <div class="goal-card-inner">
+                                <i class="fas fa-dumbbell"></i>
+                                <span>Build Muscle</span>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="onboard-activity">Activity Level</label>
+                        <select id="onboard-activity" class="form-input">
+                            <option value="sedentary">Sedentary (Little/no exercise)</option>
+                            <option value="light">Lightly Active (1-3 days/week)</option>
+                            <option value="moderate" selected>Moderately Active (3-5 days/week)</option>
+                            <option value="active">Very Active (6-7 days/week)</option>
+                            <option value="extreme">Extremely Active (Athlete)</option>
+                        </select>
+                    </div>
+                    <div class="onboarding-nav">
+                        <button class="btn btn-ghost" onclick="nextOnboardStep(2)"><i class="fas fa-arrow-left"></i> Back</button>
+                        <button class="btn btn-primary btn-glow" onclick="completeOnboarding()">Start My Journey <i class="fas fa-rocket"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="onboarding-progress">
+                <div class="progress-dot active" data-dot="1"></div>
+                <div class="progress-dot" data-dot="2"></div>
+                <div class="progress-dot" data-dot="3"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="app" class="app-container">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-leaf logo-icon"></i>
+                    <span class="logo-text">FrNourish</span>
+                </div>
+                <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle Sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-page="dashboard" id="nav-dashboard">
+                    <i class="fas fa-th-large"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-page="meal-tracker" id="nav-meal-tracker">
+                    <i class="fas fa-utensils"></i>
+                    <span>Meal Tracker</span>
+                </a>
+                <a href="#" class="nav-item" data-page="meal-planner" id="nav-meal-planner">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Meal Planner</span>
+                </a>
+                <a href="#" class="nav-item" data-page="recipes" id="nav-recipes">
+                    <i class="fas fa-book-open"></i>
+                    <span>Recipes</span>
+                </a>
+                <a href="#" class="nav-item" data-page="food-compare" id="nav-food-compare">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>Compare Foods</span>
+                </a>
+                <a href="#" class="nav-item" data-page="water-tracker" id="nav-water-tracker">
+                    <i class="fas fa-tint"></i>
+                    <span>Water Tracker</span>
+                </a>
+                <a href="#" class="nav-item" data-page="bmi-calc" id="nav-bmi-calc">
+                    <i class="fas fa-calculator"></i>
+                    <span>BMI Calculator</span>
+                </a>
+                <a href="#" class="nav-item" data-page="achievements" id="nav-achievements">
+                    <i class="fas fa-trophy"></i>
+                    <span>Achievements</span>
+                </a>
+                <a href="#" class="nav-item" data-page="mood-tracker" id="nav-mood-tracker">
+                    <i class="fas fa-smile"></i>
+                    <span>Mood & Food</span>
+                </a>
+                <a href="#" class="nav-item" data-page="settings" id="nav-settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="streak-badge">
+                    <i class="fas fa-fire"></i>
+                    <span id="sidebar-streak">0</span>
+                    <small>Day Streak</small>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button id="mobile-menu-btn" class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+                    <div class="greeting">
+                        <h1 id="greeting-text">Good Morning</h1>
+                        <p id="greeting-date"></p>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <div class="daily-score-pill" id="daily-score-pill" title="Daily Health Score">
+                        <i class="fas fa-heart-pulse"></i>
+                        <span id="daily-score-value">0</span>
+                    </div>
+                    <button class="topbar-btn" id="theme-toggle" title="Toggle Theme" aria-label="Toggle Theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="topbar-btn notification-btn" id="notification-btn" title="Tips" aria-label="Tips">
+                        <i class="fas fa-lightbulb"></i>
+                        <span class="notification-dot"></span>
+                    </button>
+                    <div class="user-avatar" id="user-avatar-btn">
+                        <span id="user-initials">U</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Contextual Tip Banner -->
+            <div id="tip-banner" class="tip-banner">
+                <i class="fas fa-lightbulb tip-icon"></i>
+                <span id="tip-text">Start your day with a glass of warm water and lemon for better digestion!</span>
+                <button class="tip-close" onclick="closeTip()"><i class="fas fa-times"></i></button>
+            </div>
+
+            <!-- Pages Container -->
+            <div class="pages-container">
+
+                <!-- ==================== DASHBOARD ==================== -->
+                <section id="page-dashboard" class="page active">
+
+                    <div class="dashboard-hero">
+                        <div class="hero-main-card">
+                            <div>
+                                <span class="eyebrow-badge"><i class="fas fa-sparkles"></i> Daily wellness</span>
+                                <h2 id="hero-title">Your healthy routine starts here</h2>
+                                <p id="hero-subtitle">A simple daily plan tailored to your goals, meals, water, and energy.</p>
+                            </div>
+                            <div class="hero-goal-row">
+                                <span class="hero-goal-chip" id="hero-goal-chip">Goal: Maintain</span>
+                                <span class="hero-goal-chip" id="hero-focus-chip">Focus: Balanced day</span>
+                            </div>
+                            <div class="hero-actions">
+                                <button class="btn btn-primary btn-glow" onclick="navigateTo('meal-tracker')"><i class="fas fa-plus-circle"></i> Log Meal</button>
+                                <button class="btn btn-ghost" onclick="navigateTo('water-tracker')"><i class="fas fa-glass-water"></i> Add Water</button>
+                                <button class="btn btn-ghost" onclick="navigateTo('meal-planner')"><i class="fas fa-calendar-days"></i> View Plan</button>
+                            </div>
+                        </div>
+                        <div class="hero-side-card">
+                            <div class="hero-mini-stat">
+                                <span class="hero-mini-label">Calories left</span>
+                                <strong id="hero-remaining-cal">0 kcal</strong>
+                            </div>
+                            <div class="hero-mini-stat">
+                                <span class="hero-mini-label">Protein to go</span>
+                                <strong id="hero-protein-left">0 g</strong>
+                            </div>
+                            <div class="hero-mini-stat">
+                                <span class="hero-mini-label">Next focus</span>
+                                <strong id="hero-next-focus">Log your first meal</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stats Row -->
+                    <div class="stats-grid">
+                        <div class="stat-card stat-calories">
+                            <div class="stat-icon"><i class="fas fa-fire-flame-curved"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="stat-calories">0</span>
+                                <span class="stat-label">Calories Today</span>
+                                <div class="stat-bar"><div class="stat-bar-fill" id="cal-bar" style="width:0%"></div></div>
+                                <span class="stat-sub" id="cal-goal-text">of 2000 kcal</span>
+                            </div>
+                        </div>
+                        <div class="stat-card stat-protein">
+                            <div class="stat-icon"><i class="fas fa-drumstick-bite"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="stat-protein">0g</span>
+                                <span class="stat-label">Protein</span>
+                                <div class="stat-bar"><div class="stat-bar-fill protein-fill" id="protein-bar" style="width:0%"></div></div>
+                                <span class="stat-sub" id="protein-goal-text">of 120g</span>
+                            </div>
+                        </div>
+                        <div class="stat-card stat-water">
+                            <div class="stat-icon"><i class="fas fa-glass-water"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="stat-water">0</span>
+                                <span class="stat-label">Glasses of Water</span>
+                                <div class="stat-bar"><div class="stat-bar-fill water-fill" id="water-bar" style="width:0%"></div></div>
+                                <span class="stat-sub">of 8 glasses</span>
+                            </div>
+                        </div>
+                        <div class="stat-card stat-streak">
+                            <div class="stat-icon"><i class="fas fa-fire"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="stat-streak">0</span>
+                                <span class="stat-label">Day Streak</span>
+                                <div class="streak-flames" id="streak-flames"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Row -->
+                    <div class="charts-grid">
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3>Calorie Ring</h3>
+                                <span class="chart-badge" id="cal-percent">0%</span>
+                            </div>
+                            <div class="donut-container">
+                                <canvas id="calorieDonut"></canvas>
+                                <div class="donut-center">
+                                    <span class="donut-value" id="donut-cal-value">0</span>
+                                    <span class="donut-label">kcal left</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3>Macro Split</h3>
+                            </div>
+                            <canvas id="macroChart"></canvas>
+                            <div class="macro-legend">
+                                <div class="legend-item"><span class="legend-dot protein-dot"></span> Protein</div>
+                                <div class="legend-item"><span class="legend-dot carb-dot"></span> Carbs</div>
+                                <div class="legend-item"><span class="legend-dot fat-dot"></span> Fat</div>
+                            </div>
+                        </div>
+                        <div class="chart-card chart-wide">
+                            <div class="chart-header">
+                                <h3>Weekly Calories</h3>
+                                <div class="chart-tabs">
+                                    <button class="chart-tab active" data-range="week">Week</button>
+                                    <button class="chart-tab" data-range="month">Month</button>
+                                </div>
+                            </div>
+                            <div class="chart-container-wrapper">
+                                <canvas id="weeklyChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="insights-grid">
+                        <div class="section-card compact-card">
+                            <div class="section-header">
+                                <h3><i class="fas fa-list-check"></i> Daily Checklist</h3>
+                            </div>
+                            <div id="daily-checklist" class="checklist-list"></div>
+                        </div>
+                        <div class="section-card compact-card">
+                            <div class="section-header">
+                                <h3><i class="fas fa-wand-magic-sparkles"></i> Smart Insights</h3>
+                            </div>
+                            <div id="smart-insights" class="insight-list"></div>
+                        </div>
+                        <div class="section-card compact-card">
+                            <div class="section-header">
+                                <h3><i class="fas fa-heart-circle-check"></i> Wellness Snapshot</h3>
+                            </div>
+                            <div id="wellness-snapshot" class="snapshot-list"></div>
+                        </div>
+                    </div>
+
+                    <!-- Today's Meals -->
+                    <div class="section-card">
+                        <div class="section-header">
+                            <h3><i class="fas fa-utensils"></i> Today's Meals</h3>
+                            <button class="btn btn-sm btn-primary" onclick="navigateTo('meal-tracker')">+ Add Meal</button>
+                        </div>
+                        <div id="today-meals-list" class="meals-timeline">
+                            <div class="empty-state">
+                                <i class="fas fa-bowl-food"></i>
+                                <p>No meals logged yet today. Start tracking!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Nutrient Heatmap -->
+                    <div class="section-card">
+                        <div class="section-header">
+                            <h3><i class="fas fa-chart-area"></i> Nutrient Heatmap (Last 7 Days)</h3>
+                        </div>
+                        <div class="heatmap-grid" id="nutrient-heatmap"></div>
+                    </div>
+                </section>
+
+                <!-- ==================== MEAL TRACKER ==================== -->
+                <section id="page-meal-tracker" class="page">
+                    <div class="page-header">
+                        <h2><i class="fas fa-utensils"></i> Meal Tracker</h2>
+                        <p>Search foods, log meals, and track your nutrition.</p>
+                    </div>
+                    <div class="meal-tracker-layout">
+                        <div class="meal-logger-card">
+                            <h3>Log a Meal</h3>
+                            <div class="form-group">
+                                <label>Meal Type</label>
+                                <div class="meal-type-selector">
+                                    <button class="meal-type-btn active" data-type="breakfast"><i class="fas fa-sun"></i> Breakfast</button>
+                                    <button class="meal-type-btn" data-type="lunch"><i class="fas fa-cloud-sun"></i> Lunch</button>
+                                    <button class="meal-type-btn" data-type="dinner"><i class="fas fa-moon"></i> Dinner</button>
+                                    <button class="meal-type-btn" data-type="snack"><i class="fas fa-cookie-bite"></i> Snack</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="food-search">Search Food</label>
+                                <div class="search-wrapper">
+                                    <i class="fas fa-search"></i>
+                                    <input type="text" id="food-search" class="form-input" placeholder="Type to search foods..." autocomplete="off">
+                                    <div id="food-search-results" class="search-dropdown"></div>
+                                </div>
+                            </div>
+
+                            <div class="quick-food-panel">
+                                <div class="panel-subheader">
+                                    <h4><i class="fas fa-bolt"></i> Quick Picks</h4>
+                                    <button class="btn btn-ghost btn-sm" onclick="renderQuickFoodPanels()">Refresh</button>
+                                </div>
+                                <div id="quick-food-picks" class="chip-wrap"></div>
+                            </div>
+                            <div class="quick-food-columns">
+                                <div class="mini-panel">
+                                    <div class="panel-subheader">
+                                        <h4><i class="fas fa-star"></i> Favorites</h4>
+                                    </div>
+                                    <div id="favorite-foods-list" class="mini-list"></div>
+                                </div>
+                                <div class="mini-panel">
+                                    <div class="panel-subheader">
+                                        <h4><i class="fas fa-clock-rotate-left"></i> Recent</h4>
+                                    </div>
+                                    <div id="recent-foods-list" class="mini-list"></div>
+                                </div>
+                            </div>
+
+                            <div id="selected-food-info" class="selected-food-info" style="display:none;">
+                                <div class="food-info-header">
+                                    <h4 id="selected-food-name"></h4>
+                                    <span class="food-score-badge" id="selected-food-score"></span>
+                                </div>
+                                <div class="food-macros-mini">
+                                    <div class="macro-mini"><span class="macro-mini-val" id="sel-cal">0</span><span>kcal</span></div>
+                                    <div class="macro-mini"><span class="macro-mini-val" id="sel-protein">0</span><span>Protein</span></div>
+                                    <div class="macro-mini"><span class="macro-mini-val" id="sel-carbs">0</span><span>Carbs</span></div>
+                                    <div class="macro-mini"><span class="macro-mini-val" id="sel-fat">0</span><span>Fat</span></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="food-servings">Servings</label>
+                                    <input type="number" id="food-servings" class="form-input" value="1" min="0.25" step="0.25">
+                                </div>
+
+                                <div class="selected-food-actions">
+                                    <button class="btn btn-ghost btn-sm" id="selected-food-fav-btn" onclick="toggleFavoriteSelectedFood()">
+                                        <i class="fas fa-star"></i> Save Favorite
+                                    </button>
+                                </div>
+
+                                <button class="btn btn-primary btn-glow btn-block" onclick="logMeal()">
+                                    <i class="fas fa-plus-circle"></i> Log This Meal
+                                </button>
+                            </div>
+                        </div>
+                        <div class="meal-history-card">
+                            <div class="panel-subheader history-subheader">
+                                <h3>Today's Log</h3>
+                                <button class="btn btn-ghost btn-sm" onclick="copyYesterdayMeals()"><i class="fas fa-copy"></i> Copy Yesterday</button>
+                            </div>
+                            <div id="meal-log-list" class="meal-log-list">
+                                <div class="empty-state small">
+                                    <i class="fas fa-clipboard-list"></i>
+                                    <p>Nothing logged yet</p>
+                                </div>
+                            </div>
+                            <div class="meal-log-totals" id="meal-log-totals" style="display:none;">
+                                <h4>Daily Totals</h4>
+                                <div class="totals-grid">
+                                    <div class="total-item"><span class="total-val" id="total-cal">0</span><span>kcal</span></div>
+                                    <div class="total-item"><span class="total-val" id="total-protein">0</span><span>Protein</span></div>
+                                    <div class="total-item"><span class="total-val" id="total-carbs">0</span><span>Carbs</span></div>
+                                    <div class="total-item"><span class="total-val" id="total-fat">0</span><span>Fat</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== MEAL PLANNER ==================== -->
+                <section id="page-meal-planner" class="page">
+                    <div class="page-header">
+                        <h2><i class="fas fa-calendar-alt"></i> Weekly Meal Planner</h2>
+                        <p>Plan your meals for the entire week.</p>
+                    </div>
+
+                    <div class="planner-toolbar">
+                        <div class="planner-note" id="planner-note">A balanced week that stays easy to follow.</div>
+                        <div class="planner-actions">
+                            <button class="btn btn-primary" onclick="generatePlanner()"><i class="fas fa-wand-sparkles"></i> Generate Fresh Plan</button>
+                            <button class="btn btn-ghost" onclick="copyPlannerSummary()"><i class="fas fa-copy"></i> Copy Summary</button>
+                        </div>
+                    </div>
+
+                    <div class="planner-grid" id="planner-grid">
+                        <!-- Dynamically generated -->
+                    </div>
+
+                    <div class="section-card planner-shopping-card">
+                        <div class="section-header">
+                            <h3><i class="fas fa-basket-shopping"></i> Auto Shopping List</h3>
+                        </div>
+                        <div id="shopping-list" class="shopping-list"></div>
+                    </div>
+                </section>
+
+                <!-- ==================== RECIPES ==================== -->
+                <section id="page-recipes" class="page">
+                    <div class="page-header">
+                        <h2><i class="fas fa-book-open"></i> Healthy Recipes</h2>
+                        <p>Discover delicious, nutritious recipes curated for your goals.</p>
+                    </div>
+                    <div class="recipes-filter">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="breakfast">Breakfast</button>
+                        <button class="filter-btn" data-filter="lunch">Lunch</button>
+                        <button class="filter-btn" data-filter="dinner">Dinner</button>
+                        <button class="filter-btn" data-filter="snack">Snacks</button>
+                        <button class="filter-btn" data-filter="vegan">Vegan</button>
+                        <button class="filter-btn" data-filter="high-protein">High Protein</button>
+                    </div>
+                    <div class="recipes-grid" id="recipes-grid">
+                        <!-- Dynamically generated -->
+                    </div>
+
+                    <!-- Recipe Detail Modal -->
+                    <div id="recipe-modal" class="modal-overlay" style="display:none;">
+                        <div class="modal recipe-detail-modal">
+                            <button class="modal-close" onclick="closeRecipeModal()"><i class="fas fa-times"></i></button>
+                            <div id="recipe-detail-content"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== FOOD COMPARE ==================== -->
+                <section id="page-food-compare" class="page">
+                    <div class="page-header">
+                        <h2><i class="fas fa-exchange-alt"></i> Food Comparison</h2>
+                        <p>Compare nutritional values of two foods side by side.</p>
+                    </div>
+                    <div class="compare-layout">
+                        <div class="compare-card">
+                            <h3>Food A</h3>
+                            <div class="search-wrapper">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="compare-food-a" class="form-input" placeholder="Search food..." autocomplete="off">
+                                <div id="compare-results-a" class="search-dropdown"></div>
+                            </div>
+                            <div id="compare-info-a" class="compare-info"></div>
+                        </div>
+                        <div class="compare-vs"><span>VS</span></div>
+                        <div class="compare-card">
+                            <h3>Food B</h3>
+                            <div class="search-wrapper">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="compare-food-b" class="form-input" placeholder="Search food..." autocomplete="off">
+                                <div id="compare-results-b" class="search-dropdown"></div>
+                            </div>
+                            <div id="compare-info-b" class="compare-info"></div>
+                        </div>
+                    </div>
+                    <div id="compare-chart-container" class="compare-chart-container" style="display:none;">
+                        <canvas id="compareChart"></canvas>
+                    </div>
+                </section>
+
+                <!-- ==================== WATER TRACKER ==================== -->
+                <section id="page-water-tracker" class="page">
+                    <div class="page-header">
+                        <h2><i class="fas fa-tint"></i> Water Tracker</h2>
+                        <p>Stay hydrated throughout the day.</p>
+                    </div>
+                    <div class="water-layout">
+                        <div class="water-bottle-card">
+                            <div class="water-bottle" id="water-bottle">
+                                <div class="water-fill" id="water-fill" style="height:0%">
+                                    <div class="water-wave"></div>
+                                </div>
+                                <div class="water-marks">
+                                    <span>8</span><span>6</span><span>4</span><span>2</span>
+                                </div>
+                            </div>
+                            <div class="water-count">
+                                <span id="water-count-value">0</span> / 8 glasses
+                            </div>
+                            <div class="water-buttons">
+                                <button class="btn btn-water btn-remove" onclick="adjustWater(-1)"><i class="fas fa-minus"></i></button>
+                                <button class="btn btn-water btn-add-water" onclick="adjustWater(1)"><i class="fas fa-plus"></i></button>
+                            </div>
+                        </div>
+                        <div class="water-history-card">
+                            <h3>Hydration Log</h3>
+                            <div id="water-log" class="water-log"></div>
+                        </div>
+                    </div>
+
+                    <div class="hydration-extra-grid">
+                        <div class="section-card compact-card">
+                            <div class="section-header">
+                                <h3><i class="fas fa-droplet"></i> Hydration Status</h3>
+                            </div>
+                            <div id="hydration-status" class="hydration-status"></div>
+                        </div>
+                        <div class="section-card compact-card">
+                            <div class="section-header">
+                                <h3><i class="fas fa-bell"></i> Quick Reminders</h3>
+                            </div>
+                            <div id="hydration-reminders" class="insight-list"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== BMI CALCULATOR ==================== -->
+                <section id="page-bmi-calc" class="page">
+                    <div class="page-header">
+                        <h2><i class="fas fa-calculator"></i> BMI Calculator</h2>
+                        <p>Check your Body Mass Index and understand your health zone.</p>
+                    </div>
+                    <div class="bmi-layout">
+                        <div class="bmi-input-card">
+                            <div class="form-group">
+                                <label for="bmi-height">Height (cm)</label>
+                                <input type="number" id="bmi-height" class="form-input" placeholder="170">
+                            </div>
+                            <div class="form-group">
+                                <label for="bmi-weight">Weight (kg)</label>
+                                <input type="number" id="bmi-weight" class="form-input" placeholder="70">
+                            </div>
+                            <button class="btn btn-primary btn-glow btn-block" onclick="calculateBMI()">
+                                <i class="fas fa-calculator"></i> Calculate BMI
+                            </button>
+                        </div>
+                        <div class="bmi-result-card" id="bmi-result-card" style="display:none;">
+                            <div class="bmi-gauge">
+                                <div class="bmi-scale">
+                                    <div class="bmi-zone underweight">Underweight</div>
+                                    <div class="bmi-zone normal">Normal</div>
+                                    <div class="bmi-zone overweight">Overweight</div>
+                                    <div class="bmi-zone obese">Obese</div>
+                                </div>
+                                <div class="bmi-pointer" id="bmi-pointer" style="left:0%"></div>
+                            </div>
+                            <div class="bmi-value-display">
+                                <span class="bmi-number" id="bmi-number">0</span>
+                                <span class="bmi-category" id="bmi-category">--</span>
+                            </div>
+                            <p class="bmi-advice" id="bmi-advice"></p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== ACHIEVEMENTS ==================== -->
+                <section id="page-achievements" class="page">
+                    <div class="page-header">
+                        <h2><i class="fas fa-trophy"></i> Achievements</h2>
+                        <p>Track your milestones and unlock badges.</p>
+                    </div>
+                    <div class="achievements-grid" id="achievements-grid">
+                        <!-- Dynamically generated -->
+                    </div>
+                </section>
+
+                <!-- ==================== MOOD TRACKER ==================== -->
+                <section id="page-mood-tracker" class="page">
+                    <div class="page-header">
+                        <h2><i class="fas fa-smile"></i> Mood & Food Journal</h2>
+                        <p>Track how food affects your mood and energy levels.</p>
+                    </div>
+                    <div class="mood-layout">
+                        <div class="mood-input-card">
+                            <h3>How are you feeling?</h3>
+                            <div class="mood-selector">
+                                <button class="mood-btn" data-mood="great" title="Great"><i class="fas fa-face-grin-stars"></i></button>
+                                <button class="mood-btn" data-mood="good" title="Good"><i class="fas fa-face-smile"></i></button>
+                                <button class="mood-btn" data-mood="okay" title="Okay"><i class="fas fa-face-meh"></i></button>
+                                <button class="mood-btn" data-mood="bad" title="Bad"><i class="fas fa-face-frown"></i></button>
+                                <button class="mood-btn" data-mood="terrible" title="Terrible"><i class="fas fa-face-dizzy"></i></button>
+                            </div>
+                            <div class="form-group">
+                                <label>Energy Level</label>
+                                <input type="range" id="energy-slider" min="1" max="10" value="5" class="energy-slider">
+                                <div class="energy-labels"><span>Low</span><span id="energy-value">5</span><span>High</span></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="mood-notes">Notes (optional)</label>
+                                <textarea id="mood-notes" class="form-input" placeholder="How does your food make you feel?" rows="3"></textarea>
+                            </div>
+                            <button class="btn btn-primary btn-glow btn-block" onclick="logMood()">
+                                <i class="fas fa-save"></i> Log Mood
+                            </button>
+                        </div>
+                        <div class="mood-history-card">
+                            <h3>Mood History</h3>
+                            <div id="mood-history" class="mood-history"></div>
+                        </div>
+                    </div>
+
+                    <div class="section-card compact-card mood-summary-card">
+                        <div class="section-header">
+                            <h3><i class="fas fa-brain"></i> Mood Insights</h3>
+                        </div>
+                        <div id="mood-summary" class="snapshot-list"></div>
+                    </div>
+                </section>
+
+                <!-- ==================== SETTINGS ==================== -->
+                <section id="page-settings" class="page">
+                    <div class="page-header">
+                        <h2><i class="fas fa-cog"></i> Settings</h2>
+                        <p>Customize your FrNourish experience.</p>
+                    </div>
+                    <div class="settings-layout">
+                        <div class="settings-card">
+                            <h3><i class="fas fa-user"></i> Profile</h3>
+                            <div class="form-group">
+                                <label for="settings-name">Name</label>
+                                <input type="text" id="settings-name" class="form-input">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="settings-age">Age</label>
+                                    <input type="number" id="settings-age" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="settings-gender">Gender</label>
+                                    <select id="settings-gender" class="form-input">
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="settings-height">Height (cm)</label>
+                                    <input type="number" id="settings-height" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="settings-weight">Weight (kg)</label>
+                                    <input type="number" id="settings-weight" class="form-input">
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" onclick="saveSettings()"><i class="fas fa-save"></i> Save Profile</button>
+                        </div>
+                        <div class="settings-card">
+                            <h3><i class="fas fa-bullseye"></i> Goals</h3>
+                            <div class="form-group">
+                                <label for="settings-cal-goal">Daily Calorie Goal</label>
+                                <input type="number" id="settings-cal-goal" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="settings-protein-goal">Protein Goal (g)</label>
+                                <input type="number" id="settings-protein-goal" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="settings-water-goal">Water Goal (glasses)</label>
+                                <input type="number" id="settings-water-goal" class="form-input">
+                            </div>
+                            <button class="btn btn-primary" onclick="saveGoals()"><i class="fas fa-save"></i> Save Goals</button>
+                        </div>
+
+                        <div class="settings-card">
+                            <h3><i class="fas fa-sliders"></i> Experience</h3>
+                            <div class="preference-list">
+                                <label class="pref-toggle">
+                                    <div>
+                                        <strong>Reduced Motion</strong>
+                                        <p>Calmer animations for easier viewing.</p>
+                                    </div>
+                                    <input type="checkbox" id="pref-reduced-motion">
+                                </label>
+                                <label class="pref-toggle">
+                                    <div>
+                                        <strong>Larger Text</strong>
+                                        <p>Make the interface easier to read.</p>
+                                    </div>
+                                    <input type="checkbox" id="pref-large-text">
+                                </label>
+                                <label class="pref-toggle">
+                                    <div>
+                                        <strong>Show Daily Tips</strong>
+                                        <p>Keep helpful nutrition tips visible.</p>
+                                    </div>
+                                    <input type="checkbox" id="pref-show-tips">
+                                </label>
+                                <label class="pref-toggle">
+                                    <div>
+                                        <strong>Animated Background</strong>
+                                        <p>Toggle floating background particles.</p>
+                                    </div>
+                                    <input type="checkbox" id="pref-particles">
+                                </label>
+                            </div>
+                            <button class="btn btn-primary" onclick="savePreferences()"><i class="fas fa-save"></i> Save Preferences</button>
+                        </div>
+
+                        <div class="settings-card">
+                            <h3><i class="fas fa-database"></i> Data</h3>
+                            <p class="text-muted">Manage your stored data.</p>
+                            <button class="btn btn-outline" onclick="exportData()"><i class="fas fa-download"></i> Export Data</button>
+                            <button class="btn btn-outline" onclick="triggerImportData()"><i class="fas fa-upload"></i> Import Data</button>
+                            <button class="btn btn-danger" onclick="clearAllData()"><i class="fas fa-trash"></i> Clear All Data</button>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Floating Quick Add Button -->
+    <button id="fab-btn" class="fab" title="Quick Add Meal" aria-label="Quick Add Meal">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <input type="file" id="import-data-input" accept=".json" hidden>
+
+    <!-- Toast Notification -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
